@@ -1,0 +1,84 @@
+@startuml
+!theme plain
+left to right direction
+
+' Actores principales
+actor Usuario
+actor "Empleado de Soporte" as Soporte
+actor Administrador
+
+rectangle "Sistema de Gestión Musical y Analytics (Basado en 13 Tablas)" {
+
+    ' --- Casos para Usuario ---
+    usecase "Navegar Música" as UC_Browse
+    usecase "Buscar Música" as UC_Search
+    usecase "Ver Detalle de Álbum / Canción" as UC_ViewDetails
+    usecase "Comprar Canciones" as UC_Buy
+    usecase "Pagar" as UC_Pay
+    usecase "Gestionar Playlist" as UC_Playlist
+    usecase "Agregar Canciones a Playlist" as UC_AddTrack
+    usecase "Eliminar Canciones de Playlist" as UC_RemoveTrack
+
+    ' --- Casos internos (incluidos/extensiones) ---
+    usecase "Generar Factura" as UC_Invoice
+    usecase "Validar Método de Pago" as UC_ValidatePay
+    usecase "Confirmar Compra" as UC_ConfirmPurchase
+
+    ' --- Casos para Soporte ---
+    usecase "Consultar Clientes Asignados" as UC_SupportClients
+    usecase "Ver Historial de Compras" as UC_ViewHistory
+    usecase "Asistir al Cliente" as UC_Assist
+
+    ' --- Casos para Administrador (Transaccionales) ---
+    usecase "Gestionar Empleados" as UC_AdminEmployees
+    usecase "Gestionar Música (CRUD)" as UC_AdminMusic
+
+    ' --- Casos Analíticos (Activados por los Data Marts) ---
+    usecase "Generar Reportes de Ventas" as UC_ReportsDM
+    usecase "Identificar Clientes Inactivos" as UC_InactiveDM
+}
+
+' --- Relaciones Usuario ---
+Usuario --> UC_Browse
+Usuario --> UC_Search
+Usuario --> UC_ViewDetails
+Usuario --> UC_Buy
+Usuario --> UC_Playlist
+Usuario --> UC_AddTrack
+Usuario --> UC_RemoveTrack
+
+' Comprar incluye múltiples pasos
+UC_Buy --> UC_Pay : <<include>>
+UC_Pay --> UC_ValidatePay : <<include>>
+UC_Buy --> UC_Invoice : <<include>>
+UC_Buy --> UC_ConfirmPurchase : <<include>>
+
+' Playlist
+UC_Playlist --> UC_AddTrack : <<include>>
+UC_Playlist --> UC_RemoveTrack : <<include>>
+
+' --- Relaciones Soporte ---
+Soporte --> UC_SupportClients
+Soporte --> UC_ViewHistory
+Soporte --> UC_Assist
+
+' --- Relaciones Administrador ---
+Administrador --> UC_AdminEmployees
+Administrador --> UC_AdminMusic
+
+' Casos analíticos (Data Marts)
+Administrador --> UC_ReportsDM
+Administrador --> UC_InactiveDM
+
+' Notas sobre el vínculo con las 13 tablas
+note right of UC_ReportsDM
+  Usa el Data Mart "dm_ventas_agentes".
+  Generado con JOIN + GROUP BY.
+end note
+
+note right of UC_InactiveDM
+  Usa el Data Mart "dm_clientes_inactivos".
+  Generado con lógica NOT EXISTS.
+end note
+
+@enduml

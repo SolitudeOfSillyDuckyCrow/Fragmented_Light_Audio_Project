@@ -24,10 +24,10 @@ El resultado final certifica la **persistencia** de un esquema robusto de **13 t
 El proyecto se despliega en una instancia de PostgreSQL (demostrado en **Neon**).
 
 1.  **Conexión:** Obtener la cadena de conexión de la instancia de Neon.
-2.  **Paso 1: Carga del Esquema Base:** Ejecutar el script **`sql/01_esquema_base_chinook.sql`** para crear las 11 tablas transaccionales.
+2.  **Paso 1: Carga del Esquema Base (Fase L):** Ejecutar el script **`sql/01_esquema_base_chinook.sql`** para crear las 11 tablas transaccionales.
 3.  **Paso 2: Transformación (Fase T):** Ejecutar el script **`sql/02_transformacion_datamarts.sql`** para crear y poblar las dos tablas de Data Marts analíticos.
-4.  **Verificación Final:** La base de datos estará correctamente construida y lista para consultas, contando con un total de **13 tablas**.
-
+4.  **Verificación Final:** La base de datos estará correctamente construida con un total de **13 tablas** funcionales.
+5.  **Técnica de Respaldo:** El archivo **`sql/03_dump_final_persistido.sql`** contiene el *dump* completo del esquema final, cumpliendo con las técnicas de respaldo.
 ---
 
 ## ✅ Matriz de Cumplimiento Técnico

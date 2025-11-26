@@ -1,0 +1,119 @@
+@startuml
+!theme plain
+
+header Esquema Final: 11 Tablas Transaccionales + 2 Data Marts
+title Diagrama Entidad-Relación (ERD) - 13 Tablas
+
+' -------------------------------------------
+' Esquema Transaccional Base (11 Tablas - Anexo A)
+' -------------------------------------------
+entity "ARTIST" as artist {
+    * artist_id : INTEGER
+}
+
+entity "ALBUM" as album {
+    * album_id : INTEGER
+    --
+    artist_id : INTEGER
+}
+
+entity "TRACK" as track {
+    * track_id : INTEGER
+    --
+    album_id : INTEGER
+    genre_id : INTEGER
+    media_type_id : INTEGER
+}
+
+entity "GENRE" as genre {
+    * genre_id : INTEGER
+}
+
+entity "MEDIA_TYPE" as media {
+    * media_type_id : INTEGER
+}
+
+entity "CUSTOMER" as customer {
+    * customer_id : INTEGER
+    --
+    support_rep_id : INTEGER
+}
+
+entity "EMPLOYEE" as employee {
+    * employee_id : INTEGER
+    --
+    reports_to : INTEGER
+}
+
+entity "INVOICE" as invoice {
+    * invoice_id : INTEGER
+    --
+    customer_id : INTEGER
+}
+
+entity "INVOICE_LINE" as invoice_line {
+    * invoice_line_id : INTEGER
+    --
+    invoice_id : INTEGER
+    track_id : INTEGER
+}
+
+entity "PLAYLIST" as playlist {
+    * playlist_id : INTEGER
+}
+
+entity "PLAYLIST_TRACK" as playlist_track {
+    * playlist_id : INTEGER
+    * track_id : INTEGER
+}
+
+' -------------------------------------------
+' Relaciones del Esquema Base
+' -------------------------------------------
+album }o--|| artist : artist_id
+track }o--|| album : album_id
+track }o--|| genre : genre_id
+track }o--|| media : media_type_id
+customer }o--|| employee : support_rep_id
+employee }o--|| employee : reports_to
+invoice }o--|| customer : customer_id
+invoice_line }o--|| invoice : invoice_id
+invoice_line }o--|| track : track_id
+playlist_track }o--|| playlist : playlist_id
+playlist_track }o--|| track : track_id
+
+' -------------------------------------------
+' Data Marts (Estructuras Analíticas)
+' -------------------------------------------
+rectangle "Data Marts (Estructuras Analíticas - Fase T)" {
+
+    entity "DM_CLIENTES_INACTIVOS" as dm_inactivos {
+        * customer_id : INTEGER
+        --
+        first_name : VARCHAR
+        last_name : VARCHAR
+        email : VARCHAR
+        country : VARCHAR
+    }
+
+    entity "DM_VENTAS_AGENTES" as dm_ventas {
+        * employee_id : INTEGER
+        --
+        agente_soporte : TEXT
+        ventas_totales_generadas : NUMERIC
+    }
+
+    note right of dm_inactivos
+      Creada con lógica NOT EXISTS.
+      Tabla desnormalizada para
+      reportes de BI.
+    end note
+
+    note right of dm_ventas
+      Creada con LEFT JOIN y GROUP BY.
+      Tabla de agregación para
+      KPIs de rendimiento.
+    end note
+}
+
+@enduml

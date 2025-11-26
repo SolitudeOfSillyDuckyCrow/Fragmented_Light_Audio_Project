@@ -1,0 +1,37 @@
+# ----------------------------------------------------
+# Archivos de Sistema Operativo Comunes
+# ----------------------------------------------------
+.DS_Store             # Archivos de macOS
+Thumbs.db             # Archivos de Windows
+
+# ----------------------------------------------------
+# Archivos Temporales de IDEs y Editores (Ej. VS Code, Sublime)
+# ----------------------------------------------------
+*.log
+*~
+*.swp                 # Archivos de intercambio de Vim
+.vscode/              # Carpeta de configuración local de VS Code
+.idea/                # Carpeta de configuración de JetBrains/IntelliJ
+
+# ----------------------------------------------------
+# Archivos Temporales de Microsoft Office
+# (Importante ya que la documentación es un .docx)
+# ----------------------------------------------------
+~$*.docx
+~$*.doc
+~$*.xlsx
+~$*.pptx
+
+# ----------------------------------------------------
+# Archivos de Datos Grandes o Temporales (Ignorar CSVs intermedios)
+# ----------------------------------------------------
+*.csv
+*.tsv
+*.zip
+*.tar.gz
+
+# ----------------------------------------------------
+# Scripts SQL (Asegurar que los .sql funcionales NO se ignoren)
+# ----------------------------------------------------
+# NOTA: Los archivos en la carpeta /sql/ SÍ DEBEN SUBIRSE.
+# Este archivo .gitignore está diseñado para NO ignorarlos.
