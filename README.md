@@ -18,7 +18,7 @@ El resultado final certifica la **persistencia** de un esquema robusto de **13 t
 
 ## 🚀 Instrucciones de Despliegue y Uso
 
-| Rúbrica: Instrucciones de instalación o uso |
+| Instrucciones de instalación o uso |
 | :--- |
 
 El proyecto se despliega en una instancia de PostgreSQL (demostrado en **Neon**).
@@ -32,7 +32,7 @@ El proyecto se despliega en una instancia de PostgreSQL (demostrado en **Neon**)
 
 ## ✅ Matriz de Cumplimiento Técnico
 
-| Rúbrica: Cumplimiento técnico (Aplicar todos los temas del curso) |
+| Cumplimiento técnico |
 | :--- |
 
 | Tema del Curso | Evidencia en el Proyecto |
