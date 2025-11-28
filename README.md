@@ -18,27 +18,34 @@ El resultado final certifica la **persistencia** de un esquema robusto de **13 t
 
 ## 🚀 Instrucciones de Despliegue y Uso
 
-| Instrucciones de instalación o uso |
+| Rúbrica: Instrucciones de instalación o uso |
 | :--- |
 
 El proyecto se despliega en una instancia de PostgreSQL (demostrado en **Neon**).
 
-1.  **Conexión:** Obtener la cadena de conexión de la instancia de Neon.
-2.  **Paso 1: Carga del Esquema Base (Fase L):** Ejecutar el script **`sql/01_esquema_base_chinook.sql`** para crear las 11 tablas transaccionales.
-3.  **Paso 2: Transformación (Fase T):** Ejecutar el script **`sql/02_transformacion_datamarts.sql`** para crear y poblar las dos tablas de Data Marts analíticos.
-4.  **Verificación Final:** La base de datos estará correctamente construida con un total de **13 tablas** funcionales.
-5.  **Técnica de Respaldo:** El archivo **`sql/03_dump_final_persistido.sql`** contiene el *dump* completo del esquema final, cumpliendo con las técnicas de respaldo.
+1.  **Conexión:** Obtener la cadena de conexión de la instancia de PostgreSQL.
+
+2.  **Paso Opcional (Admin): Tablespace Funcional:** Si se tienen permisos de *superusuario*, ejecutar el script **`sql/00_tablespace_demo.sql`** para la demostración funcional de la Administración de Espacios Físicos.
+
+3.  **Paso 1: Carga del Esquema Base (Fase L):** Ejecutar el script **`sql/01_esquema_base_chinook.sql`** para crear las 11 tablas transaccionales.
+
+4.  **Paso 2: Transformación (Fase T):** Ejecutar el script **`sql/02_transformacion_datamarts.sql`** para crear y poblar las dos tablas de Data Marts analíticos.
+
+5.  **Verificación Final:** La base de datos estará correctamente construida con un total de **13 tablas** funcionales.
+
+6.  **Técnica de Respaldo:** El archivo **`sql/03_dump_final_persistido.sql`** contiene el *dump* completo del esquema final, cumpliendo con las técnicas de respaldo.
+
 ---
 
 ## ✅ Matriz de Cumplimiento Técnico
 
-| Cumplimiento técnico |
+| Rúbrica: Cumplimiento técnico (Aplicar todos los temas del curso) |
 | :--- |
 
 | Tema del Curso | Evidencia en el Proyecto |
 | :--- | :--- |
 | **Administradores y manejadores de bases de datos** | Uso de **PostgreSQL** y la plataforma **Neon** como servicio DBaaS. |
-| **Administración de espacios lógicos y físicos** | Gestión del esquema **`public`** con **13 tablas** y definición de `PRIMARY KEY`. |
+| **Administración de espacios lógicos y físicos** | Gestión del esquema **`public`** con **13 tablas** (lógico). **DEMOSTRACIÓN FUNCIONAL** en el script **`sql/00_tablespace_demo.sql`** (físico). |
 | **Técnicas de respaldo y recuperación** | Archivo **`sql/03_dump_final_persistido.sql`** (Respaldo técnico de la base de datos completa con 13 tablas). |
 | **Monitoreo y seguridad** | Uso de la conexión **SSL** (requerida por Neon) y gestión de privilegios del usuario. |
 | **Afinación de una base de datos** | Creación de **Data Marts** para optimizar consultas analíticas, evitando escaneos complejos en las tablas transaccionales. |
