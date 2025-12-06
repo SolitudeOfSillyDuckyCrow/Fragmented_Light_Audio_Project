@@ -1,0 +1,81 @@
+#*******************************************************************************
+#  SCRIPT: docker-compose.yml
+#  PROPOSITO: Definir la infraestructura de la Arquitectura de Datos ELT.
+#  SERVICIOS: 1. Postgres (BD/Almacenamiento), 2. Airflow (Orquestación), 3. Grafana (Visualización).
+#  CRITICIDAD: El archivo central para levantar el ambiente reproducible.
+#********************************************************************************/
+
+version: '3.8'
+
+services:
+  # 1. Base de Datos PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: postgres-chinook
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: chinook
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Carga Inicial del esquema de 11 tablas transaccionales (E/L)
+      - ./sql/01_esquema_base_chinook.sql:/docker-entrypoint-initdb.d/01_esquema_base_chinook.sql
+    ports:
+      - "5432:5432"
+    restart: always
+
+  # 2. Orquestador Apache Airflow
+  airflow-webserver:
+    image: apache/airflow:2.8.1
+    container_name: airflow-webserver
+    depends_on:
+      - postgres
+    environment:
+      # Conexión a la BD de metadatos de Airflow
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/chinook
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'super-secret-key-development'
+      _AIRFLOW_DB_MIGRATE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${AIRFLOW_USER}
+      _AIRFLOW_WWW_USER_PASSWORD: ${AIRFLOW_PASSWORD}
+    volumes:
+      # Monta el directorio de DAGs (scripts de Python para orquestación)
+      - ./airflow/dags:/opt/airflow/dags
+    ports:
+      - "8080:8080"
+    command: webserver
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /opt/airflow/airflow-webserver.pid ]"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: always
+
+  # 3. Plataforma de Visualización Grafana
+  grafana:
+    image: grafana/grafana:10.2.3
+    container_name: grafana
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_LOG_LEVEL: info
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      # Montaje del archivo postgres.yml para auto-configurar la fuente de datos
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    restart: always
+
+volumes:
+  postgres_data:
+  grafana_data:
+
+#*******************************************************************************
+#  FIN DEL SCRIPT: docker-compose.yml
+#  Resultado: Infraestructura lista para la orquestación y visualización.
+#********************************************************************************/

@@ -1,0 +1,32 @@
+#*******************************************************************************
+#  SCRIPT: grafana/datasources/postgres.yml
+#  PROPOSITO: Configurar automáticamente la fuente de datos PostgreSQL en Grafana.
+#  CRITICIDAD: Es esencial para la visualización del esquema de 13 tablas.
+#  NOTAS: Usa el nombre del servicio Docker 'postgres' para la URL.
+#********************************************************************************
+apiVersion: 1
+datasources:
+  - name: Chinook PostgreSQL
+    type: postgres
+    access: proxy
+    isDefault: true
+    # CRUCIAL: Uso del nombre del servicio Docker 'postgres'
+    url: postgres:5432
+    database: chinook
+    user: ${POSTGRES_USER}  # Usamos variables de entorno para las credenciales
+    secureJsonData:
+      password: ${POSTGRES_PASSWORD} # La contraseña debe ir en secureJsonData
+    version: 15
+    jsonData:
+      sslmode: 'disable'
+      maxOpenConns: 0
+      maxIdleConns: 0
+      connMaxLifetime: 14400
+      statementTimeout: 0
+      timescaledb: false
+      logQueries: false
+
+#*******************************************************************************
+#  FIN DEL SCRIPT: grafana/datasources/postgres.yml
+#  Resultado: Grafana tendrá el Data Source 'Chinook PostgreSQL' listo al iniciar.
+#********************************************************************************/
